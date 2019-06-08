@@ -52,5 +52,52 @@ The REST APIs can be tested using popular REST client like Postman. Another way 
      * HTTP Statuses:
        * 200: Transfer successful
        * 404: Account not found
-       * 406: Insufficient balance 
-     
+       * 406: Insufficient balance
+       
+  * Account statement with account balance and list of transactions  
+    * HTTP GET URI: `/api/v1/statements/{accountNumber}` 
+    * Response body:  
+     ```
+     {
+         "balance":28000,
+         "accountId":1,
+         "transactionDtoList":[
+            {
+               "type":3,
+               "amount":500,
+               "id":3,
+               "toAccId":2,
+               "fromAccId":1,
+               "transactionDate":"2019-06-08T18:05:23.000+0000"
+            },
+            {
+               "type":3,
+               "amount":1000,
+               "id":4,
+               "fromAccId":1,
+               "toAccId":2,
+               "transactionDate":"2019-06-08T18:10:53.000+0000"
+            },
+            {
+               "type":3,
+               "id":5,
+               "amount":500,
+               "toAccId":1,
+               "fromAccId":2,
+               "transactionDate":"2019-06-08T18:11:16.000+0000"
+            },
+            {
+               "fromAccId":1,
+               "toAccId":2,
+               "transactionDate":"2019-06-08T20:46:35.000+0000",
+               "id":6,
+               "type":3,
+               "amount":1000
+            }
+         ],
+         "accountNumber":"121-123-323"
+     }
+     ```  
+     * HTTP Statuses:
+       * 200: Statement and transactions found
+       * 404: Account not found     
