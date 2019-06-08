@@ -24,3 +24,33 @@ This is a simple banking application. It can be used for transferring amount bet
   `$ mvn clean test`
   * To run end to end test, execute the following command:  
   `$ mvn clean compile compiler:testCompile failsafe:integration-test`  
+  
+### Using the REST API  
+The REST APIs can be tested using popular REST client like Postman. Another way to test the REST APIs is to use *curl* command. Here are some sample requests and responses.  
+
+  * Sending money between accounts
+    * HTTP POST URI: `/api/v1/transactions/transfer` 
+    * Request body:  
+     ```
+     {
+         "fromAccNumber":"121-123-323",
+         "toAccNumber":"121-123-876",
+         "amount":1000
+     }
+     ```    
+     * Response body: 
+     ```
+     {
+         "toAccId":2,
+         "id":6,
+         "transactionDate":"2019-06-08T20:46:35.331+0000",
+         "fromAccId":1,
+         "amount":1000,
+         "type":3
+     }
+     ```  
+     * HTTP Statuses:
+       * 200: Transfer successful
+       * 404: Account not found
+       * 406: Insufficient balance 
+     
