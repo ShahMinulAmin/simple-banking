@@ -1,5 +1,5 @@
 # simple-banking
-Simple banking application that can be used for transferring amount between accounts, viewing statement with account balance and list of transactions.
+This is a simple banking application. It can be used for transferring amount between accounts, viewing statement with account balance and list of transactions.
 
 ### Required environment 
   * JDK 8
