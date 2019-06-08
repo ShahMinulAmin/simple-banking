@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-/** */
+/**
+ * Service implementation to do CRUD operations on Account entity
+ */
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -18,7 +20,12 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-    /** */
+    /**
+     * Used to get an account by its id
+     *
+     * @param id The id of account
+     * @return Account instance
+     */
     @Override
     public Account getAccountById(Integer id) throws ResourceNotFoundException {
         LOG.info("Getting account by id");
@@ -29,6 +36,12 @@ public class AccountServiceImpl implements AccountService {
         return account.get();
     }
 
+    /**
+     * Used to get an account by its account number
+     *
+     * @param accountNumber The account number of the account
+     * @return Account instance
+     */
     @Override
     public Account getAccountByAccountNumber(String accountNumber) throws ResourceNotFoundException {
         LOG.info("Getting account by account number");
@@ -39,7 +52,12 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findByAccountNumber(accountNumber);
     }
 
-    /** */
+    /**
+     * Used to store account instance
+     *
+     * @param account The account object to store
+     * @return Account instance
+     */
     @Override
     public Account saveOrUpdateAccount(Account account) {
         LOG.info("Storing account entity");

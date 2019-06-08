@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- *
+ * REST API to get statement of an account
  */
 @RestController
 @RequestMapping("/api/v1/statements")
@@ -28,7 +28,9 @@ public class StatementController {
     @Autowired
     TransactionService transactionService;
 
-    /** */
+    /**
+     * Used to get statement of an account
+     */
     @GetMapping("/{accountNumber}")
     public ResponseEntity<StatementDto> getStatement(@PathVariable(value = "accountNumber") String accountNumber)
             throws ResourceNotFoundException {

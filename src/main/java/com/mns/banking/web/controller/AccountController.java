@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/** */
+/**
+ * REST API to do CRUD operations on Account entity
+ */
 @RestController
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
@@ -21,7 +23,9 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-    /** */
+    /**
+     * Used to get an account by its account number
+     */
     @GetMapping("/{accountNumber}")
     public ResponseEntity<AccountDto> getAccount(@PathVariable(value = "accountNumber") String accountNumber)
             throws ResourceNotFoundException {
@@ -33,7 +37,9 @@ public class AccountController {
         return ResponseEntity.ok().body(accountDto);
     }
 
-    /** */
+    /**
+     * Used to store an account
+     */
     @PostMapping()
     public ResponseEntity<AccountDto> addAccount(@RequestBody AccountDto accountDto) {
         Account account = entityBuilder.buildAccountEntity(accountDto);

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 
 /**
- *
+ * REST API to transfer amount from one account to another
  */
 @RestController
 @RequestMapping("/api/v1/transactions")
@@ -32,7 +32,7 @@ public class TransactionController {
     TransactionService transactionService;
 
     /**
-     *
+     * Used to transfer amount from one account to another
      */
     @PostMapping("/transfer")
     public ResponseEntity<TransactionDto> transferAmount(@RequestBody TransferDto transferDto)
