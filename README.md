@@ -22,5 +22,5 @@ This is a simple banking application. It can be used for transferring amount bet
   `$ mvn clean spring-boot:run`
   * To run the unit tests, execute the following command:  
   `$ mvn clean test`
-  * To run integration tests, execute the following command:  
+  * To run end to end test, execute the following command:  
   `$ mvn clean compile compiler:testCompile failsafe:integration-test`  
