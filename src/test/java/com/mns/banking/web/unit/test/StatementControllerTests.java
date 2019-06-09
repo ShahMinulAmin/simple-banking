@@ -3,6 +3,7 @@ package com.mns.banking.web.unit.test;
 import com.mns.banking.SimpleBankingApplication;
 import com.mns.banking.entity.Account;
 import com.mns.banking.entity.Transaction;
+import com.mns.banking.exception.ResourceNotFoundException;
 import com.mns.banking.service.AccountService;
 import com.mns.banking.service.TransactionService;
 import com.mns.banking.web.model.TransferDto;
@@ -62,6 +63,8 @@ public class StatementControllerTests {
 
         when(accountService.getAccountByAccountNumber("121-123-323")).thenReturn(account1);
         when(accountService.getAccountByAccountNumber("121-123-876")).thenReturn(account2);
+        when(accountService.getAccountByAccountNumber("121-123-999"))
+                .thenThrow(new ResourceNotFoundException("Account not found"));
         when(transactionService.getTransactions(account1)).thenReturn(transactionList);
     }
 
@@ -72,5 +75,13 @@ public class StatementControllerTests {
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.transactionDtoList[0].amount", is(500.0)));
+    }
+
+    @Test
+    public void GivenUnavailableAccount_WhenGetStatement_ThenReturnNotFound() throws Exception {
+        ResultActions result = mockMvc.perform(get("/api/v1/statements/{accountNumber}", "121-123-999").
+                contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());
     }
 }

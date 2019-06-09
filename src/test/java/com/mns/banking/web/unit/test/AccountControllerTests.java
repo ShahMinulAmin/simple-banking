@@ -2,6 +2,7 @@ package com.mns.banking.web.unit.test;
 
 import com.mns.banking.SimpleBankingApplication;
 import com.mns.banking.entity.Account;
+import com.mns.banking.exception.ResourceNotFoundException;
 import com.mns.banking.service.AccountService;
 import com.mns.banking.web.model.AccountDto;
 import com.mns.banking.web.util.JsonUtil;
@@ -49,6 +50,8 @@ public class AccountControllerTests {
 
         when(accountService.getAccountByAccountNumber("121-123-323")).thenReturn(account1);
         when(accountService.saveOrUpdateAccount(any(Account.class))).thenReturn(account2);
+        when(accountService.getAccountByAccountNumber("121-123-999"))
+                .thenThrow(new ResourceNotFoundException("Account not found"));
     }
 
     @Test
@@ -71,6 +74,14 @@ public class AccountControllerTests {
 
         result.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("Paul Alen")));
+    }
+
+    @Test
+    public void GivenUnavailableAccount_WhenGetAccount_ThenReturnNotFound() throws Exception {
+        ResultActions result = mockMvc.perform(get("/api/v1/accounts/{accountNumber}", "121-123-999").
+                contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());
     }
 
 }

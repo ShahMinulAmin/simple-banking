@@ -3,6 +3,8 @@ package com.mns.banking.web.unit.test;
 import com.mns.banking.SimpleBankingApplication;
 import com.mns.banking.entity.Account;
 import com.mns.banking.entity.Transaction;
+import com.mns.banking.exception.InsufficientBalanceException;
+import com.mns.banking.exception.ResourceNotFoundException;
 import com.mns.banking.service.AccountService;
 import com.mns.banking.service.TransactionService;
 import com.mns.banking.web.model.TransferDto;
@@ -53,11 +55,16 @@ public class TransactionControllerTests {
         Account account2 = new Account(2, "121-123-876", "Paul Alen",
                 "Banani, Dhaka", new BigDecimal(20000));
         BigDecimal amount = new BigDecimal(500.0);
+        BigDecimal amount2 = new BigDecimal(40500.0);
         Transaction transaction = new Transaction(3, account1, account2, amount, 3, dateObj);
 
         when(accountService.getAccountByAccountNumber("121-123-323")).thenReturn(account1);
         when(accountService.getAccountByAccountNumber("121-123-876")).thenReturn(account2);
+        when(accountService.getAccountByAccountNumber("121-123-999"))
+                .thenThrow(new ResourceNotFoundException("Account not found"));
         when(transactionService.transferAmount(account1, account2, amount)).thenReturn(transaction);
+        when(transactionService.transferAmount(account1, account2, amount2))
+                .thenThrow(new InsufficientBalanceException("Does not have sufficient balance to transfer"));
     }
 
     @Test
@@ -70,5 +77,27 @@ public class TransactionControllerTests {
 
         result.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.amount", is(500.0)));
+    }
+
+    @Test
+    public void GivenTwoAccounts_WhenTransferAmountExceedingBalance_ThenReturnNotAcceptable() throws Exception {
+        TransferDto transferDto = new TransferDto("121-123-323", "121-123-876", 40500.0);
+
+        ResultActions result = mockMvc.perform(post("/api/v1/transactions/transfer")
+                .content(JsonUtil.toJson(transferDto))
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotAcceptable());
+    }
+
+    @Test
+    public void GivenUnavailableAccount_WhenTransferAmount_ThenReturnNotFound() throws Exception {
+        TransferDto transferDto = new TransferDto("121-123-999", "121-123-876", 500.0);
+
+        ResultActions result = mockMvc.perform(post("/api/v1/transactions/transfer")
+                .content(JsonUtil.toJson(transferDto))
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());
     }
 }
