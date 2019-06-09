@@ -51,6 +51,7 @@ The REST APIs can be tested using popular REST client like Postman. Another way 
      ```  
      * HTTP Statuses:
        * 200: Transfer successful
+       * 400: Amount null or negative
        * 404: Account not found
        * 406: Insufficient balance
        
